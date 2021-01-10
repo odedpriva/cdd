@@ -1,0 +1,254 @@
+{
+    "objects": [
+        {
+            "application": "Local|hello-world",
+            "name": "master",
+            "kind": "ApplicationVersion"
+        },
+        {
+            "applicationVersions": [
+                "Local|hello-world/master"
+            ],
+            "isReplaceApplicationVersionOnChangeNotification": false,
+            "memberParties": [
+                "Platform"
+            ],
+            "markAsDonePhaseName": "",
+            "runOnCreation": false,
+            "version": "0.1.0",
+            "name": "hello-world",
+            "kind": "Release",
+            "ownerParties": [
+                "Platform"
+            ]
+        },
+        {
+            "release": "hello-world/0.1.0",
+            "isProduction": false,
+            "scope": "PHASE_SCOPE",
+            "value": "",
+            "name": "ea-inactive-environment",
+            "kind": "ReleaseToken"
+        },
+        {
+            "release": "hello-world/0.1.0",
+            "isProduction": false,
+            "scope": "PHASE_SCOPE",
+            "value": "hello-world",
+            "name": "service",
+            "kind": "ReleaseToken"
+        },
+        {
+            "release": "hello-world/0.1.0",
+            "environments": [
+                "EA"
+            ],
+            "approvalGate": "AUTOMATIC",
+            "skipTasksWithUnchangedApplications": false,
+            "isApprovalRequired": false,
+            "name": "ea",
+            "kind": "Phase",
+            "ownerParties": [
+                "Platform"
+            ]
+        },
+        {
+            "release": "hello-world/0.1.0",
+            "environments": [
+                "EA",
+                "PROD-US",
+                "PROD-EU"
+            ],
+            "onFailureFailedPhase": "ea",
+            "approvalGate": "ON_FAILURE",
+            "skipTasksWithUnchangedApplications": false,
+            "isApprovalRequired": false,
+            "name": "notify-on-failure",
+            "kind": "Phase",
+            "ownerParties": [
+                "Platform"
+            ]
+        },
+        {
+            "phase": "hello-world/0.1.0/ea",
+            "isDisabled": false,
+            "applicationVersionBuilds": [
+                {
+                    "applicationVersion": "Local|hello-world/master",
+                    "buildNumber": "%hello-world.last_successful_change%"
+                }
+            ],
+            "isOnFailurePhaseEnabled": true,
+            "isSkipTaskOnFailure": false,
+            "name": "get-inactive-environment",
+            "kind": "Task",
+            "endpoint": "get-inactive-environment",
+            "plugin": "sed-sac-ea|REST/2.6",
+            "parameters": {
+                "OUTPUT_VALUE": "%ea-inactive-environment%",
+                "method": "GET",
+                "statusCheck": "false",
+                "postScript": "if (responseCode == 200) {\noutput = response.env_name;    \nreturn true;\n    \n} else {\n    return false;\n}",
+                "url": ""
+            },
+            "type": "REST",
+            "ownerParties": [
+                "Platform"
+            ]
+        },
+        {
+            "phase": "hello-world/0.1.0/ea",
+            "previousTasks": [
+                "get-inactive-environment"
+            ],
+            "isDisabled": false,
+            "applicationVersionBuilds": [
+                {
+                    "applicationVersion": "Local|hello-world/master",
+                    "buildNumber": "%hello-world.last_successful_change%"
+                }
+            ],
+            "isOnFailurePhaseEnabled": true,
+            "isSkipTaskOnFailure": false,
+            "name": "ea-notify-start-release",
+            "kind": "Task",
+            "endpoint": "Slack",
+            "plugin": "Slack/1.1",
+            "parameters": {
+                "channel": "@oded.priva@broadcom.com",
+                "message": "deploying %service% %hello-world.last_successful_change% on %cdd.phase_name% %ea-inactive-environment% check commit here: https://bitbucket.org/accezz-io/%service%/commits/%hello-world.last_successful_change% release can be found here: %cdd.release_url%",
+                "username": "CDDirector"
+            },
+            "type": "Post message",
+            "ownerParties": [
+                "Platform"
+            ]
+        },
+        {
+            "phase": "hello-world/0.1.0/ea",
+            "previousTasks": [
+                "ea-notify-start-release"
+            ],
+            "isDisabled": true,
+            "applicationVersionBuilds": [
+                {
+                    "applicationVersion": "Local|hello-world/master",
+                    "buildNumber": "%hello-world.last_successful_change%"
+                }
+            ],
+            "isOnFailurePhaseEnabled": true,
+            "isSkipTaskOnFailure": false,
+            "name": "sync-image",
+            "kind": "Task"
+        },
+        {
+            "phase": "hello-world/0.1.0/ea",
+            "previousTasks": [
+                "sync-image"
+            ],
+            "isDisabled": false,
+            "applicationVersionBuilds": [
+                {
+                    "applicationVersion": "Local|hello-world/master",
+                    "buildNumber": "%hello-world.last_successful_change%"
+                }
+            ],
+            "isOnFailurePhaseEnabled": true,
+            "isSkipTaskOnFailure": false,
+            "name": "sync-chart",
+            "kind": "Task",
+            "endpoint": "sedsac-internal",
+            "plugin": "internal|Secure Access Cloud/1.0|1",
+            "parameters": {
+                "commandLinePath": "sync-chart",
+                "commandLineArgs": "-s %service% -t %hello-world.last_successful_change% -a %EnvironmentToken/jfrog-helm-chart-artifactory%",
+                "operationTimeOut": "300"
+            },
+            "type": "Run Command Line",
+            "ownerParties": [
+                "Platform"
+            ]
+        },
+        {
+            "phase": "hello-world/0.1.0/ea",
+            "previousTasks": [
+                "sync-chart"
+            ],
+            "isDisabled": false,
+            "applicationVersionBuilds": [
+                {
+                    "applicationVersion": "Local|hello-world/master",
+                    "buildNumber": "%hello-world.last_successful_change%"
+                }
+            ],
+            "isOnFailurePhaseEnabled": true,
+            "isSkipTaskOnFailure": false,
+            "name": "notify-start-deploy",
+            "kind": "Task",
+            "endpoint": "Slack",
+            "plugin": "Slack/1.1",
+            "parameters": {
+                "channel": "",
+                "message": "%cdd.phase_name% in inactive environment %ea-inactive-environment%",
+                "username": "CDDirector"
+            },
+            "type": "Post message",
+            "ownerParties": [
+                "Platform"
+            ]
+        },
+        {
+            "phase": "hello-world/0.1.0/ea",
+            "previousTasks": [
+                "notify-start-deploy"
+            ],
+            "isDisabled": false,
+            "applicationVersionBuilds": [
+                {
+                    "applicationVersion": "Local|hello-world/master",
+                    "buildNumber": "%hello-world.last_successful_change%"
+                }
+            ],
+            "isOnFailurePhaseEnabled": true,
+            "isSkipTaskOnFailure": false,
+            "name": "deploy",
+            "kind": "Task",
+            "endpoint": "sedsac-internal",
+            "plugin": "internal|Secure Access Cloud/1.0|1",
+            "parameters": {
+                "commandLinePath": "echo",
+                "commandLineArgs": "deploy -e %ea-inactive-environment% -y %cdd.phase_name% -s %service% -t %hello-world.last_successful_change% -a %EnvironmentToken/jfrog-helm-chart-artifactory% -k %EnvironmentToken/cstack-k8s-environment-name% -g %EnvironmentToken/github-cd-organization%/%EnvironmentToken/github-cd-repo% -d %EnvironmentToken/jfrog-docker-artifactory% -o %EnvironmentToken/github-cd-organization%",
+                "operationTimeOut": "300"
+            },
+            "type": "Run Command Line",
+            "ownerParties": [
+                "Platform"
+            ]
+        },
+        {
+            "phase": "hello-world/0.1.0/notify-on-failure",
+            "isDisabled": false,
+            "applicationVersionBuilds": [
+                {
+                    "applicationVersion": "Local|hello-world/master",
+                    "buildNumber": "%hello-world.last_successful_change%"
+                }
+            ],
+            "isOnFailurePhaseEnabled": true,
+            "isSkipTaskOnFailure": false,
+            "name": "notify-on-slack",
+            "kind": "Task",
+            "endpoint": "Slack",
+            "plugin": "Slack/1.1",
+            "parameters": {
+                "channel": "#cd-director-releases",
+                "message": "FAILED: check release: %cdd.release_url%",
+                "username": "CDDirector"
+            },
+            "type": "Post message",
+            "ownerParties": [
+                "Platform"
+            ]
+        }
+    ]
+}
