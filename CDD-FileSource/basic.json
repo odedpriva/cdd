@@ -1,13 +1,13 @@
 {
     "objects": [
         {
-            "application": "Local|hello-world",
+            "application": "Local|${SERVICE}",
             "name": "master",
             "kind": "ApplicationVersion"
         },
         {
             "applicationVersions": [
-                "Local|hello-world/master"
+                "Local|${SERVICE}/master"
             ],
             "isReplaceApplicationVersionOnChangeNotification": false,
             "memberParties": [
@@ -16,14 +16,14 @@
             "markAsDonePhaseName": "",
             "runOnCreation": false,
             "version": "${RELEASE_VERSION}",
-            "name": "hello-world",
+            "name": "${SERVICE}",
             "kind": "Release",
             "ownerParties": [
                 "Platform"
             ]
         },
         {
-            "release": "hello-world/${RELEASE_VERSION}",
+            "release": "${SERVICE}/${RELEASE_VERSION}",
             "isProduction": false,
             "scope": "PHASE_SCOPE",
             "value": "",
@@ -31,15 +31,15 @@
             "kind": "ReleaseToken"
         },
         {
-            "release": "hello-world/${RELEASE_VERSION}",
+            "release": "${SERVICE}/${RELEASE_VERSION}",
             "isProduction": false,
             "scope": "PHASE_SCOPE",
-            "value": "hello-world",
+            "value": "${SERVICE}",
             "name": "service",
             "kind": "ReleaseToken"
         },
         {
-            "release": "hello-world/${RELEASE_VERSION}",
+            "release": "${SERVICE}/${RELEASE_VERSION}",
             "environments": [
                 "EA"
             ],
@@ -53,7 +53,7 @@
             ]
         },
         {
-            "release": "hello-world/${RELEASE_VERSION}",
+            "release": "${SERVICE}/${RELEASE_VERSION}",
             "environments": [
                 "EA",
                 "PROD-US",
@@ -70,12 +70,12 @@
             ]
         },
         {
-            "phase": "hello-world/${RELEASE_VERSION}/ea",
+            "phase": "${SERVICE}/${RELEASE_VERSION}/ea",
             "isDisabled": false,
             "applicationVersionBuilds": [
                 {
-                    "applicationVersion": "Local|hello-world/master",
-                    "buildNumber": "%hello-world.last_successful_change%"
+                    "applicationVersion": "Local|${SERVICE}/master",
+                    "buildNumber": "%${SERVICE}.last_successful_change%"
                 }
             ],
             "isOnFailurePhaseEnabled": true,
@@ -97,15 +97,15 @@
             ]
         },
         {
-            "phase": "hello-world/${RELEASE_VERSION}/ea",
+            "phase": "${SERVICE}/${RELEASE_VERSION}/ea",
             "previousTasks": [
                 "get-inactive-environment"
             ],
             "isDisabled": false,
             "applicationVersionBuilds": [
                 {
-                    "applicationVersion": "Local|hello-world/master",
-                    "buildNumber": "%hello-world.last_successful_change%"
+                    "applicationVersion": "Local|${SERVICE}/master",
+                    "buildNumber": "%${SERVICE}.last_successful_change%"
                 }
             ],
             "isOnFailurePhaseEnabled": true,
@@ -116,7 +116,7 @@
             "plugin": "Slack/1.1",
             "parameters": {
                 "channel": "@oded.priva@broadcom.com",
-                "message": "deploying %service% %hello-world.last_successful_change% on %cdd.phase_name% %ea-inactive-environment% check commit here: https://bitbucket.org/accezz-io/%service%/commits/%hello-world.last_successful_change% release can be found here: %cdd.release_url%",
+                "message": "deploying %service% %${SERVICE}.last_successful_change% on %cdd.phase_name% %ea-inactive-environment% check commit here: https://bitbucket.org/accezz-io/%service%/commits/%${SERVICE}.last_successful_change% release can be found here: %cdd.release_url%",
                 "username": "CDDirector"
             },
             "type": "Post message",
@@ -125,15 +125,15 @@
             ]
         },
         {
-            "phase": "hello-world/${RELEASE_VERSION}/ea",
+            "phase": "${SERVICE}/${RELEASE_VERSION}/ea",
             "previousTasks": [
                 "ea-notify-start-release"
             ],
             "isDisabled": true,
             "applicationVersionBuilds": [
                 {
-                    "applicationVersion": "Local|hello-world/master",
-                    "buildNumber": "%hello-world.last_successful_change%"
+                    "applicationVersion": "Local|${SERVICE}/master",
+                    "buildNumber": "%${SERVICE}.last_successful_change%"
                 }
             ],
             "isOnFailurePhaseEnabled": true,
@@ -142,15 +142,15 @@
             "kind": "Task"
         },
         {
-            "phase": "hello-world/${RELEASE_VERSION}/ea",
+            "phase": "${SERVICE}/${RELEASE_VERSION}/ea",
             "previousTasks": [
                 "sync-image"
             ],
             "isDisabled": false,
             "applicationVersionBuilds": [
                 {
-                    "applicationVersion": "Local|hello-world/master",
-                    "buildNumber": "%hello-world.last_successful_change%"
+                    "applicationVersion": "Local|${SERVICE}/master",
+                    "buildNumber": "%${SERVICE}.last_successful_change%"
                 }
             ],
             "isOnFailurePhaseEnabled": true,
@@ -161,7 +161,7 @@
             "plugin": "internal|Secure Access Cloud/1.0|1",
             "parameters": {
                 "commandLinePath": "sync-chart",
-                "commandLineArgs": "-s %service% -t %hello-world.last_successful_change% -a %EnvironmentToken/jfrog-helm-chart-artifactory%",
+                "commandLineArgs": "-s %service% -t %${SERVICE}.last_successful_change% -a %EnvironmentToken/jfrog-helm-chart-artifactory%",
                 "operationTimeOut": "300"
             },
             "type": "Run Command Line",
@@ -170,15 +170,15 @@
             ]
         },
         {
-            "phase": "hello-world/${RELEASE_VERSION}/ea",
+            "phase": "${SERVICE}/${RELEASE_VERSION}/ea",
             "previousTasks": [
                 "sync-chart"
             ],
             "isDisabled": false,
             "applicationVersionBuilds": [
                 {
-                    "applicationVersion": "Local|hello-world/master",
-                    "buildNumber": "%hello-world.last_successful_change%"
+                    "applicationVersion": "Local|${SERVICE}/master",
+                    "buildNumber": "%${SERVICE}.last_successful_change%"
                 }
             ],
             "isOnFailurePhaseEnabled": true,
@@ -198,15 +198,15 @@
             ]
         },
         {
-            "phase": "hello-world/${RELEASE_VERSION}/ea",
+            "phase": "${SERVICE}/${RELEASE_VERSION}/ea",
             "previousTasks": [
                 "notify-start-deploy"
             ],
             "isDisabled": false,
             "applicationVersionBuilds": [
                 {
-                    "applicationVersion": "Local|hello-world/master",
-                    "buildNumber": "%hello-world.last_successful_change%"
+                    "applicationVersion": "Local|${SERVICE}/master",
+                    "buildNumber": "%${SERVICE}.last_successful_change%"
                 }
             ],
             "isOnFailurePhaseEnabled": true,
@@ -217,7 +217,7 @@
             "plugin": "internal|Secure Access Cloud/1.0|1",
             "parameters": {
                 "commandLinePath": "echo",
-                "commandLineArgs": "deploy -e %ea-inactive-environment% -y %cdd.phase_name% -s %service% -t %hello-world.last_successful_change% -a %EnvironmentToken/jfrog-helm-chart-artifactory% -k %EnvironmentToken/cstack-k8s-environment-name% -g %EnvironmentToken/github-cd-organization%/%EnvironmentToken/github-cd-repo% -d %EnvironmentToken/jfrog-docker-artifactory% -o %EnvironmentToken/github-cd-organization%",
+                "commandLineArgs": "deploy -e %ea-inactive-environment% -y %cdd.phase_name% -s %service% -t %${SERVICE}.last_successful_change% -a %EnvironmentToken/jfrog-helm-chart-artifactory% -k %EnvironmentToken/cstack-k8s-environment-name% -g %EnvironmentToken/github-cd-organization%/%EnvironmentToken/github-cd-repo% -d %EnvironmentToken/jfrog-docker-artifactory% -o %EnvironmentToken/github-cd-organization%",
                 "operationTimeOut": "300"
             },
             "type": "Run Command Line",
@@ -226,12 +226,12 @@
             ]
         },
         {
-            "phase": "hello-world/${RELEASE_VERSION}/notify-on-failure",
+            "phase": "${SERVICE}/${RELEASE_VERSION}/notify-on-failure",
             "isDisabled": false,
             "applicationVersionBuilds": [
                 {
-                    "applicationVersion": "Local|hello-world/master",
-                    "buildNumber": "%hello-world.last_successful_change%"
+                    "applicationVersion": "Local|${SERVICE}/master",
+                    "buildNumber": "%${SERVICE}.last_successful_change%"
                 }
             ],
             "isOnFailurePhaseEnabled": true,

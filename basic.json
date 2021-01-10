@@ -9,7 +9,10 @@
     ],
     "releaseDsl": {
         "dslFilename": "CDD-FileSource/basic.json",
-        "dslParameters": {},
+        "dslParameters": {
+            "RELEASE_VERSION": "master",
+            "SERVICE": "test"
+        },
         "fileSourceName": "github",
         "fileSourceParameters": {},
         "releaseDslScope": "APPLICATION"
@@ -21,11 +24,3 @@
         }
     ]
 }
-  
-  curl -s --header "Content-Type: application/json" --header "Accept: application/json" \
-  -d "{ \"applicationName\": \"$REPOSITORY_NAME\", \"applicationVersionBuildNumber\": \"$REPOSITORY_BRANCH_BUILD_NUMBER\", \"applicationVersionName\": \"$REPOSITORY_BRANCH\", 
-  \"commits\": [ { \"commitId\": \"$REPOSITORY_BRANCH_GIT_COMMIT_ID\" } ]}" 
-  "$CDD_SERVER_URL/cdd/design/$CDD_TENANT_ID/v1/applications/application-versions/application-version-builds" 
-  -H "Authorization: Bearer $CDD_API_KEY"
-  
-  "value": "Failed to create release from file-source. error was 'Can't import from Path: CDD-FileSource/basic.json  due to Failed to get files from repository cdd-file CDD-FileSource/basic.json not found in branch master'"
