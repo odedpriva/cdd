@@ -15,7 +15,7 @@
             ],
             "markAsDonePhaseName": "",
             "runOnCreation": false,
-            "version": "0.1.0",
+            "version": "${RELEASE_VERSION}",
             "name": "hello-world",
             "kind": "Release",
             "ownerParties": [
@@ -23,7 +23,7 @@
             ]
         },
         {
-            "release": "hello-world/0.1.0",
+            "release": "hello-world/${RELEASE_VERSION}",
             "isProduction": false,
             "scope": "PHASE_SCOPE",
             "value": "",
@@ -31,7 +31,7 @@
             "kind": "ReleaseToken"
         },
         {
-            "release": "hello-world/0.1.0",
+            "release": "hello-world/${RELEASE_VERSION}",
             "isProduction": false,
             "scope": "PHASE_SCOPE",
             "value": "hello-world",
@@ -39,7 +39,7 @@
             "kind": "ReleaseToken"
         },
         {
-            "release": "hello-world/0.1.0",
+            "release": "hello-world/${RELEASE_VERSION}",
             "environments": [
                 "EA"
             ],
@@ -53,7 +53,7 @@
             ]
         },
         {
-            "release": "hello-world/0.1.0",
+            "release": "hello-world/${RELEASE_VERSION}",
             "environments": [
                 "EA",
                 "PROD-US",
@@ -70,7 +70,7 @@
             ]
         },
         {
-            "phase": "hello-world/0.1.0/ea",
+            "phase": "hello-world/${RELEASE_VERSION}/ea",
             "isDisabled": false,
             "applicationVersionBuilds": [
                 {
@@ -97,7 +97,7 @@
             ]
         },
         {
-            "phase": "hello-world/0.1.0/ea",
+            "phase": "hello-world/${RELEASE_VERSION}/ea",
             "previousTasks": [
                 "get-inactive-environment"
             ],
@@ -125,7 +125,7 @@
             ]
         },
         {
-            "phase": "hello-world/0.1.0/ea",
+            "phase": "hello-world/${RELEASE_VERSION}/ea",
             "previousTasks": [
                 "ea-notify-start-release"
             ],
@@ -142,7 +142,7 @@
             "kind": "Task"
         },
         {
-            "phase": "hello-world/0.1.0/ea",
+            "phase": "hello-world/${RELEASE_VERSION}/ea",
             "previousTasks": [
                 "sync-image"
             ],
@@ -170,7 +170,7 @@
             ]
         },
         {
-            "phase": "hello-world/0.1.0/ea",
+            "phase": "hello-world/${RELEASE_VERSION}/ea",
             "previousTasks": [
                 "sync-chart"
             ],
@@ -198,7 +198,7 @@
             ]
         },
         {
-            "phase": "hello-world/0.1.0/ea",
+            "phase": "hello-world/${RELEASE_VERSION}/ea",
             "previousTasks": [
                 "notify-start-deploy"
             ],
@@ -226,7 +226,7 @@
             ]
         },
         {
-            "phase": "hello-world/0.1.0/notify-on-failure",
+            "phase": "hello-world/${RELEASE_VERSION}/notify-on-failure",
             "isDisabled": false,
             "applicationVersionBuilds": [
                 {
